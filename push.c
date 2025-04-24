@@ -19,7 +19,8 @@ int isEmpty(struct Queue *q) {
     return q->front == -1 || q->front > q->rear;
 }
 
-void push(struct Queue *q, int value) {
+
+void enqueue(struct Queue *q, int value) {
     if (isFull(q)) {
         printf("Queue is full\n");
         return;
@@ -29,7 +30,21 @@ void push(struct Queue *q, int value) {
     }
     q->rear++;
     q->items[q->rear] = value;
-    printf("Inserted %d\n", value);
+    printf("Enqueued %d\n", value);
+}
+
+int dequeue(struct Queue *q) {
+    if (isEmpty(q)) {
+        printf("Queue is empty\n");
+        return -1;
+    }
+    int value = q->items[q->front];
+    q->front++;
+    // Reset the queue if it's now empty
+    if (q->front > q->rear) {
+        q->front = q->rear = -1;
+    }
+    return value;
 }
 
 void display(struct Queue *q) {
@@ -48,10 +63,18 @@ int main() {
     struct Queue q;
     initQueue(&q);
 
-    push(&q, 10);
-    push(&q, 20);
-    push(&q, 30);
-    
+    enqueue(&q, 10);
+    enqueue(&q, 20);
+    enqueue(&q, 30);
+
+    display(&q);
+
+    printf("Dequeued: %d\n", dequeue(&q));
+    printf("Dequeued: %d\n", dequeue(&q));
+
+    display(&q);
+
+    enqueue(&q, 40);
     display(&q);
 
     return 0;
